@@ -15,6 +15,6 @@
 Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
 ```
 ```powershell
-Install-ADDSForest -DomainName "vdi.local" -SafeModeAdministratorPassword (ConvertTo-SecureString -String "Password" -AsPlainText -Force) -InstallDNS
+Install-ADDSForest -DomainName "vdi.local" -SafeModeAdministratorPassword (ConvertTo-SecureString -String "Password" -AsPlainText -Force) -InstallDNS -Force
 ```
 
