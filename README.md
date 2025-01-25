@@ -2,7 +2,7 @@
   <h1>[ The Linux🗂Samba🕹AD Service Configurations ]</h1>
 </div>
 
-###### Repository for records of how to setup AD servers [ *Written by NullBins* ]
+###### 📚 Repository for records of how to setup AD Servers [ *Written by NullBins* ]
 - By default, the commands are executed as a root user.
 
 <br/>
@@ -80,24 +80,40 @@ vim /etc/samba/base.ldif
 ldbadd -H /var/lib/samba/private/sam.ldb /etc/samba/base.ldif
 ```
 ```vim
+samba-tool group add VDIS --groupou=ou=VDI --nis-domain=VDI --gid-number=10000
+samba-tool group add VISITORS --groupou=ou=VDI --nis-domain=VDI --gid-number=20000
+```
+```vim
 vim /etc/samba/adduser.sh
 ```
 >```vim
 >#!/bin/bash
 >
->### VDI-User
+>### VDI Users
 >for i in {01..10}
 >do
->  samba-tool user create vdi$i PW --userou=ou=VDI --script-path=/bin/bash --home-directory=/home/vdi$i --uid-number=10$i --gid-number=65534
+>  samba-tool user create vdi$i PW --userou=ou=VDI --script-path=/bin/bash --home-directory=/home/vdi$i --uid-number=10$i --gid-number=10000
 >done
 >
->### VISITOR-User
+>### VISITOR Users
 >for i in {01..10}
 >do
->  samba-tool user create visitor$i PW --userou=ou=VDI --script-path=/bin/bash --home-directory=/home/visitor$i --uid-number=20$i --gid-number=65534
+>  samba-tool user create visitor$i PW --userou=ou=VDI --script-path=/bin/bash --home-directory=/home/visitor$i --uid-number=20$i --gid-number=20000
 >done
 >```
 ```vim
 chmod +x /etc/samba/adduser.sh
 bash /etc/samba/adduser.sh
+```
+
+<br/>
+
+- *2) Add DNS records to AD Server*
+
+<br/>
+
+```vim
+samba-tool dns add 10.10.1.1 vdi.local ns.vdi.local
+samba-tool dns add 10.10.1.1 vdi.local ldap.vdi.local
+samba-tool dns add 10.10.1.1 vdi.local www.vdi.local
 ```
